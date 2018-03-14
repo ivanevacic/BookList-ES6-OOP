@@ -30,6 +30,7 @@ UI.prototype.addBookToList = function (book) {
     console.log(row);
 }
 
+
 //show alert
 UI.prototype.showAlert = function(message, className) {
 	//create div
@@ -59,7 +60,15 @@ UI.prototype.clearFields = function(){
     document.getElementById('isbn').value = '';
 }
 
-//  Event Listeners
+//
+UI.prototype.deleteBook = function(target){
+	if(target.className === 'delete'){
+		// remove tr,parent of a parent of a tag which has delete class
+		target.parentElement.parentElement.remove();
+	}
+}
+
+//  Event Listener for add book
     //grab form
     document.getElementById('book-form').addEventListener('submit', function (e){
         // grab form values based on id
@@ -73,10 +82,11 @@ UI.prototype.clearFields = function(){
             const ui = new UI();
 
             //validate input
-            if(title === '' || author === '' || isbn === ''){
+            if(title === ''){
 							//error alert
+							inputError = 'Title is empty!';
 							ui.showAlert('Please fill in all fields!', 'error');//(text, style class)
-            }	else {
+						}	else {
 							// UI add book to list
 							ui.addBookToList(book);
 							//	show success alert
@@ -86,4 +96,20 @@ UI.prototype.clearFields = function(){
 						}           
         //  prevent default form behaviour
         e.preventDefault();
-    });
+		});
+
+
+//event listener for delete
+		//parent
+			document.getElementById('book-list').addEventListener('click', function(e){
+				const ui = new UI();
+				//call deleteBook proto function of UI class
+					// delete book with click on (x) icon 
+						ui.deleteBook(e.target);
+				//show alert
+				ui.showAlert('Book deleted', 'error');
+				//prevent default behaviour
+				e.preventDefault();
+			});
+
+
